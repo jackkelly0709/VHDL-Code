@@ -1,0 +1,63 @@
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity SIM is
+--  Port ( );
+end SIM;
+
+architecture behavioral of SIM is
+component D_latch
+Port(
+    D: in STD_LOGIC;
+    Enable: in STD_LOGIC;
+    Q: out std_logic
+    );
+end component;
+
+signal D : std_logic:= '0';
+signal Enable : std_logic :='1';
+signal Q : std_logic;
+
+begin
+UUT: D_latch 
+port map(
+    D => D,
+    Enable => Enable,
+    Q => Q
+);
+
+stimulus : process
+begin
+
+Enable <= '1';
+D <= '0';
+wait for 10 ns;
+
+D <= '1';
+wait for 10 ns;
+
+Enable <= '0';
+wait for 10 ns;
+
+D <= '0';
+wait for 10 ns;
+
+assert false
+report "Simulation Finished"
+severity failure;
+
+end process;
+end behavioral;
+
+
