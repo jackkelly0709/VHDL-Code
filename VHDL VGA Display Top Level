@@ -1,0 +1,63 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TOP_LEVEL is
+    port(
+        CLK : in std_logic;
+
+        VGA_HS : out std_logic;
+        VGA_VS : out std_logic;
+
+        VGA_R  : out std_logic_vector(3 downto 0);
+        VGA_G  : out std_logic_vector(3 downto 0);
+        VGA_B  : out std_logic_vector(3 downto 0)
+    );
+end TOP_LEVEL;
+
+architecture MAIN of TOP_LEVEL is
+
+    signal PIXEL_CLOCK : std_logic;
+
+    component clk_wiz_0
+        port(
+            CLK  : in  std_logic;
+            PIXEL_CLOCK : out std_logic
+        );
+    end component;
+
+    component VGA
+        port(
+            CLK   : in  std_logic;
+            HSYNC : out std_logic;
+            VSYNC : out std_logic;
+            R     : out std_logic_vector(3 downto 0);
+            G     : out std_logic_vector(3 downto 0);
+            B     : out std_logic_vector(3 downto 0)
+        );
+    end component;
+
+begin
+
+    ------------------------------------------------------------------
+    -- Clock Wizard
+    ------------------------------------------------------------------
+    CLKGEN : clk_wiz_0
+    port map(
+        CLK  => CLK,
+        PIXEL_CLOCK => PIXEL_CLOCK
+    );
+
+    ------------------------------------------------------------------
+    -- VGA Controller
+    ------------------------------------------------------------------
+    C1 : VGA
+    port map(
+        CLK   => PIXEL_CLOCK,
+        HSYNC => VGA_HS,
+        VSYNC => VGA_VS,
+        R     => VGA_R,
+        G     => VGA_G,
+        B     => VGA_B
+    );
+
+end MAIN;
